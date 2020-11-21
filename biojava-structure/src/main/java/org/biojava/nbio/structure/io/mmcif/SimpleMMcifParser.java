@@ -1021,7 +1021,8 @@ public class SimpleMMcifParser implements MMcifParser {
 
 			try {
 				if ( pType[0].getName().equals(Integer.class.getName())) {
-					if ( val != null && ! val.equals("?") && !val.equals(".")) {
+//					if ( val != null && ! val.equals("?") && !val.equals(".")) {
+					if(checkIfValidStrForIntConversion(val)) {
 
 						Integer intVal = Integer.parseInt(val);
 						setter.invoke(o, intVal);
@@ -1038,6 +1039,20 @@ public class SimpleMMcifParser implements MMcifParser {
 		}
 
 		return o;
+	}
+	
+	private boolean checkIfValidStrForIntConversion(String val) {
+
+		//if ( val != null || ! val.equals("?") || !val.equals(".") || !val.contains(".") )
+
+		if(val == null || val.isEmpty())
+			return false;
+
+		for(char ch : val.toCharArray()) {
+			if(ch < '0' || ch > '9')
+				return false;
+		}
+		return true;
 	}
 
 	private void produceWarning(String key, String val, Class<?> c, Set<String> warnings) {
